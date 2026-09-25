@@ -3,6 +3,8 @@ import { dvi2html } from '@prinsss/dvi2html';
 import { JSDOM } from 'jsdom';
 import { optimize } from 'svgo';
 
+import { restoreUnicodeInSvg } from './unicode';
+
 export type SvgOptions = {
   /**
    * Whether to embed the font CSS file in the SVG. Default: `false`
@@ -67,6 +69,9 @@ export async function dvi2svg(dvi: Buffer, options: SvgOptions = {}) {
   // Patch: Fixes symbols stored in the SOFT HYPHEN character (e.g. \Omega, \otimes) not being rendered
   // Replaces soft hyphens with ¬
   html = html.replaceAll('&#173;', '&#172;');
+
+  // Restore Unicode characters from placeholders
+  html = restoreUnicodeInSvg(html);
 
   // JSDOM may fail to parse the generated SVG if the graph is too complex.
   // In this case, we can skip the sanitization step and return the raw SVG.

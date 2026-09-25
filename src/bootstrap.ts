@@ -6,6 +6,8 @@ import { join } from 'path';
 import { Readable } from 'stream';
 import * as library from './library';
 
+import { generateUnicodePreamble } from './unicode';
+
 declare module 'tar-fs' {
   interface ExtractOptions {
     fs?: IFs;
@@ -86,6 +88,16 @@ export type TeXOptions = {
    * Additional source code to add to the preamble of input. Default: `''`
    */
   addToPreamble?: string;
+
+  /**
+   * Custom mapping of Unicode characters to TeX commands.
+   *
+   * @example
+   * ```js
+   * unicodeMap: { '❤': '\\ensuremath{\\heartsuit}' }
+   * ```
+   */
+  unicodeMap?: Record<string, string>;
 };
 
 /**
@@ -96,7 +108,7 @@ export type TeXOptions = {
  */
 export async function tex(input: string, options: TeXOptions = {}) {
   // Set up the tex input file.
-  const preamble = getTexPreamble(options);
+  const preamble = getTexPreamble(options, input);
   input = preamble + input;
 
   if (options.showConsole) {
@@ -145,10 +157,16 @@ export async function tex(input: string, options: TeXOptions = {}) {
 /**
  * Get preamble of the TeX input file.
  */
-export function getTexPreamble(options: TeXOptions = {}) {
+export function getTexPreamble(options: TeXOptions = {}, input: string = '') {
   let texPackages = options.texPackages ?? {};
 
+  const unicodePreamble = generateUnicodePreamble(
+    input + (options.addToPreamble || ''),
+    options.unicodeMap
+  );
+
   const preamble =
+    unicodePreamble +
     Object.entries(texPackages).reduce((usePackageString, thisPackage) => {
       usePackageString +=
         '\\usepackage' + (thisPackage[1] ? `[${thisPackage[1]}]` : '') + `{${thisPackage[0]}}`;
