@@ -154,11 +154,12 @@ async function main() {
   assert(svg17.includes('<path'), 'Must contain path elements for vector delimiters');
   console.log('  PASS');
 
-  // Test 18: Path intersections with pgfplots and amsmath
+  // Test 18: Path intersections with pgfplots and amsmath (with tolerance control)
   console.log('Test 18: Path intersections with pgfplots and amsmath');
   const svg18 = await tex2svg(`\\usepackage{pgfplots}\\usepackage[intlimits]{amsmath}\\usetikzlibrary{arrows.meta,calc}% comment
 \\usepackage{tikz}
 \\usetikzlibrary{calc,angles,quotes,fit,intersections}
+\\def\\pgfintersectiontolerance{0.5pt}
 \\begin{document}
 \\begin{tikzpicture}[thick/.style={line width=1pt},use as bounding box]
   \\coordinate (A) at (0,0);

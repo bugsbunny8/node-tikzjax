@@ -188,7 +188,6 @@ export function getTexPreamble(options: TeXOptions = {}, input: string = '') {
     '  \\providecommand{\\binom}[2]{{\\textstyle\\left(\\begin{array}{c}#1\\\\#2\\end{array}\\right)}}\n' +
     '  \\providecommand{\\dbinom}[2]{{\\displaystyle\\left(\\begin{array}{c}#1\\\\#2\\end{array}\\right)}}\n' +
     '  \\providecommand{\\tbinom}[2]{{\\textstyle\\left(\\begin{array}{c}#1\\\\#2\\end{array}\\right)}}\n' +
-    '  \\def\\pgfintersectiontolerance{0.5pt}\n' +
     '}\n';
 
   const preamble =
