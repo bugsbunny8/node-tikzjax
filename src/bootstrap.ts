@@ -182,11 +182,14 @@ export function getTexPreamble(options: TeXOptions = {}, input: string = '') {
     '\\def\\@text@sqrt[#1]#2{\\ensuremath{\\oldsqrt[#1]{#2}}}\n' +
     '\\def\\@@text@sqrt#1{\\ensuremath{\\oldsqrt{#1}}}\n' +
     '\\makeatother\n' +
-    '\\providecommand{\\tfrac}[2]{{\\textstyle\\frac{#1}{#2}}}\n' +
-    '\\providecommand{\\dfrac}[2]{{\\displaystyle\\frac{#1}{#2}}}\n' +
-    '\\providecommand{\\binom}[2]{{\\textstyle\\left(\\begin{array}{c}#1\\\\#2\\end{array}\\right)}}\n' +
-    '\\providecommand{\\dbinom}[2]{{\\displaystyle\\left(\\begin{array}{c}#1\\\\#2\\end{array}\\right)}}\n' +
-    '\\providecommand{\\tbinom}[2]{{\\textstyle\\left(\\begin{array}{c}#1\\\\#2\\end{array}\\right)}}\n';
+    '\\AtBeginDocument{\n' +
+    '  \\providecommand{\\tfrac}[2]{{\\textstyle\\frac{#1}{#2}}}\n' +
+    '  \\providecommand{\\dfrac}[2]{{\\displaystyle\\frac{#1}{#2}}}\n' +
+    '  \\providecommand{\\binom}[2]{{\\textstyle\\left(\\begin{array}{c}#1\\\\#2\\end{array}\\right)}}\n' +
+    '  \\providecommand{\\dbinom}[2]{{\\displaystyle\\left(\\begin{array}{c}#1\\\\#2\\end{array}\\right)}}\n' +
+    '  \\providecommand{\\tbinom}[2]{{\\textstyle\\left(\\begin{array}{c}#1\\\\#2\\end{array}\\right)}}\n' +
+    '  \\def\\pgfintersectiontolerance{0.5pt}\n' +
+    '}\n';
 
   const preamble =
     unicodePreamble +

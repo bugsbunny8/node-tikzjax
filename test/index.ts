@@ -154,6 +154,38 @@ async function main() {
   assert(svg17.includes('<path'), 'Must contain path elements for vector delimiters');
   console.log('  PASS');
 
+  // Test 18: Path intersections with pgfplots and amsmath
+  console.log('Test 18: Path intersections with pgfplots and amsmath');
+  const svg18 = await tex2svg(`\\usepackage{pgfplots}\\usepackage[intlimits]{amsmath}\\usetikzlibrary{arrows.meta,calc}% comment
+\\usepackage{tikz}
+\\usetikzlibrary{calc,angles,quotes,fit,intersections}
+\\begin{document}
+\\begin{tikzpicture}[thick/.style={line width=1pt},use as bounding box]
+  \\coordinate (A) at (0,0);
+  \\coordinate (D) at (4.5,0);
+  \\coordinate (B) at (1.35,0);
+  \\coordinate (P) at (2,0);
+  \\coordinate (Q) at (3,0);
+  \\coordinate (C) at (4,0);
+
+  \\draw[thick] (A)--(D);
+  \\draw[thick, name path=arc1] (A)--(A) arc[start angle=180, end angle=0, radius=2];
+  \\draw[thick, name path=arc2] (B)--(B) arc[start angle=180, end angle=0, radius=1.575];
+
+  \\path[name intersections={of=arc1 and arc2, by={R}}];
+
+  \\draw[] (A)--(R);
+  \\draw[] (P)--(R);
+  \\draw[] (Q)--(R);
+  \\draw[] (D)--(R);
+
+  \\node[fit=(current bounding box), inner sep=0.2cm] {};
+\\end{tikzpicture}
+\\end{document}`);
+  assert(svg18.includes('<svg'), 'Should generate valid SVG');
+  assert(svg18.includes('<path'), 'Should contain paths for arcs and intersection lines');
+  console.log('  PASS');
+
   console.log('--- ALL TESTS PASSED SUCCESSFULLY ---');
 }
 
